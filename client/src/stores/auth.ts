@@ -19,7 +19,6 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = newUser;
 
     router.push({ name: 'channel', params: { channelId: 1 } });
-    console.log(user.value);
   }
 
   return {
