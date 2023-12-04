@@ -1,5 +1,6 @@
 package com.chatapp.Chat.App.websocket;
 
+import com.chatapp.Chat.App.security.AuthorizationSocketInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;

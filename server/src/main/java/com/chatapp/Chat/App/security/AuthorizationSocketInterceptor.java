@@ -1,4 +1,4 @@
-package com.chatapp.Chat.App.websocket;
+package com.chatapp.Chat.App.security;
 
 import com.chatapp.Chat.App.security.jwt.JwtUtils;
 import com.chatapp.Chat.App.security.service.UserDetailsServiceImpl;
