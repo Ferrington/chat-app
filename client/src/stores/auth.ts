@@ -1,5 +1,5 @@
 import authService from '@/services/AuthService';
-import type { User } from '@/types';
+import { userSchema, type User } from '@/types';
 import axios from 'axios';
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
@@ -15,7 +15,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function login() {
     const response = await authService.login();
-    const newUser: User = response.data;
+    const newUser: User = userSchema.parse(response.data);
     user.value = newUser;
 
     router.push({ name: 'channel', params: { channelId: 1 } });
