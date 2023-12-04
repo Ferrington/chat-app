@@ -14,6 +14,7 @@ dist-ssr
 coverage
 *.local
 env.properties
+ProjectNotes.excalidraw
 
 /cypress/videos/
 /cypress/screenshots/

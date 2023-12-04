@@ -1,9 +1,15 @@
 import { Client, type StompSubscription } from '@stomp/stompjs';
-import { defineStore } from 'pinia';
+import { defineStore, storeToRefs } from 'pinia';
 import { ref, type Ref } from 'vue';
+import { useAuthStore } from './auth';
 
 export const useSocketStore = defineStore('socket', () => {
-  const client = new Client({ brokerURL: 'ws://localhost:8080/ws' });
+  const authStore = useAuthStore();
+  const { user } = storeToRefs(authStore);
+  const client = new Client({
+    brokerURL: 'ws://localhost:8080/ws',
+    connectHeaders: { Authorization: `Bearer ${user.value.accessToken}` },
+  });
   const channel = ref<number>();
   const channelSubscription = ref<StompSubscription>();
   const connected = ref(false);
@@ -52,16 +58,21 @@ export const useSocketStore = defineStore('socket', () => {
 
     messages.value = [];
     channelSubscription.value?.unsubscribe();
-    channelSubscription.value = client.subscribe(`/topic/greetings/${channel.value}`, (message) => {
-      messages.value.push(JSON.parse(message.body).content as string);
-    });
+    channelSubscription.value = client.subscribe(
+      `/topic/greetings/${channel.value}`,
+      (message) => {
+        messages.value.push(JSON.parse(message.body).content as string);
+      },
+      { Authorization: `Bearer ${user.value.accessToken}` },
+    );
     console.log('Subscribed to channel: ' + channel.value);
   }
 
   function sendMessage(message: string) {
     client.publish({
-      destination: `/ws/hello/${channel.value}`,
+      destination: `/ws/channels/${channel.value}`,
       body: JSON.stringify({ content: message }),
+      headers: { Authorization: `Bearer ${user.value.accessToken}` },
     });
   }
 

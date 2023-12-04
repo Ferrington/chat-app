@@ -1,4 +1,4 @@
-package com.chatapp.Chat.App.payload;
+package com.chatapp.Chat.App.payload.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
