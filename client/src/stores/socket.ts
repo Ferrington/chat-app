@@ -59,7 +59,7 @@ export const useSocketStore = defineStore('socket', () => {
     messages.value = [];
     channelSubscription.value?.unsubscribe();
     channelSubscription.value = client.subscribe(
-      `/topic/greetings/${channel.value}`,
+      `/topic/channels/${channel.value}`,
       (message) => {
         messages.value.push(JSON.parse(message.body).content as string);
       },

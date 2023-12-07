@@ -11,7 +11,7 @@ import java.security.Principal;
 @Controller
 public class WsChannelController {
     @MessageMapping("/channels/{channelId}")
-    @SendTo("/topic/greetings/{channelId}")
+    @SendTo("/topic/channels/{channelId}")
     public MessageDTO message(@DestinationVariable Long channelId, MessageDTO message, Principal principal) {
         return message;
     }
