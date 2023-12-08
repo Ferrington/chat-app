@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -31,9 +32,15 @@ public class Message {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false, insertable = false)
     private LocalDateTime created;
+
+    @UpdateTimestamp
+    @Column(nullable = false, updatable = true, insertable = false)
+    private LocalDateTime updated;
 }
