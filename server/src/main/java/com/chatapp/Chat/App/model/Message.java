@@ -9,10 +9,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "messages")
 @Data
 @NoArgsConstructor
@@ -37,10 +39,16 @@ public class Message {
     private String content;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false, insertable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime created;
 
     @UpdateTimestamp
-    @Column(nullable = false, updatable = true, insertable = false)
+    @Column(nullable = false, updatable = true)
     private LocalDateTime updated;
+
+    public Message(Channel channel, User user, String content) {
+        this.channel = channel;
+        this.user = user;
+        this.content = content;
+    }
 }
