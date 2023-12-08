@@ -28,4 +28,8 @@ public class Channel {
     @JsonIgnore
     @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL)
     private List<Message> messages;
+
+    public Channel(Long id) {
+        this.id = id;
+    }
 }

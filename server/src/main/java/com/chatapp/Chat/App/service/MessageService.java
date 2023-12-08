@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.util.List;
+
 import java.util.Optional;
 
 @Service
@@ -43,7 +43,4 @@ public class MessageService {
         return user.get();
     }
 
-    public List<Message> getAllMessagesInChannel(Channel channel) {
-        return messageRepository.getMessageByChannel(channel);
-    }
 }
