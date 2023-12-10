@@ -27,8 +27,8 @@ public class MessageServiceTest {
     @Test
     public void testGetAllMessagesForChannel() {
         // Mock data
-        Channel channelId1 = new Channel(1l);
-        Channel channelId2 = new Channel(2l);
+        Channel channelId1 = new Channel(1L);
+        Channel channelId2 = new Channel(2L);
         User newUser = new User("testUser", "test.email.com", "password");
 
         Message message1 = new Message(channelId1, newUser, "test message one");
