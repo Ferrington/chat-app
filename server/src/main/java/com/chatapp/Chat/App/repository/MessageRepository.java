@@ -12,5 +12,6 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
     // Fetches all messages in the channel
-    List<Message> getMessageByChannel(Channel channel);
+    // Currently is returning all columns from messages entity and not just content column
+    List<Message> getMessagesByChannel(Channel channelId);
 }

@@ -44,8 +44,8 @@ public class MessageService {
         return user.get();
     }
 
-    public List<Message> getAllMessagesInChannel(Channel channel) {
-        return messageRepository.getMessageByChannel(channel);
+    public List<Message> getAllMessagesInChannel(Channel channelId) {
+        return messageRepository.getMessagesByChannel(channelId);
     }
 
 }

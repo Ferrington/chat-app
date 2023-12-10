@@ -22,8 +22,8 @@ public class MessageController {
     MessageService messageService;
 
     @GetMapping
-    public List<Message> getAllMessagesInChannel(Channel channel) {
-        return messageService.getAllMessagesInChannel(channel);
+    public List<Message> getAllMessagesInChannel(Channel channelId) {
+        return messageService.getAllMessagesInChannel(channelId);
     }
 
 }
