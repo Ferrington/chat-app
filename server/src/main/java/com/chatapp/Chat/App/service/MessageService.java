@@ -9,7 +9,6 @@ import com.chatapp.Chat.App.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -51,7 +49,6 @@ public class MessageService {
     }
 
     @Transactional
-
     public Page<Message> getAllMessagesInChannel(Channel channelId, int page, int size) {
         //Currently sorting by last message first
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Order.desc("updated")));

@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @CrossOrigin
 @RequestMapping(path = "api/messages")
-//@PreAuthorize("hasAnyRole('USER')")
+@PreAuthorize("hasAnyRole('USER')")
 
 public class MessageController {
     @Autowired
