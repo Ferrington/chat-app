@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @CrossOrigin
 @RequestMapping(path = "api/channels")
-@PreAuthorize("hasAnyRole('USER')")
+//@PreAuthorize("hasAnyRole('USER')")
 public class ChannelController {
     @Autowired
     ChannelService channelService;

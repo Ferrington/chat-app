@@ -7,19 +7,25 @@ import com.chatapp.Chat.App.payload.request.MessageDTO;
 import com.chatapp.Chat.App.repository.MessageRepository;
 import com.chatapp.Chat.App.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class MessageService {
     @Autowired
-    MessageRepository messageRepository;
+    private MessageRepository messageRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -44,8 +50,29 @@ public class MessageService {
         return user.get();
     }
 
-    public List<Message> getAllMessagesInChannel(Channel channelId) {
-        return messageRepository.getMessagesByChannel(channelId);
+    @Transactional
+
+    public Page<Message> getAllMessagesInChannel(Channel channelId, int page, int size) {
+        //Currently sorting by last message first
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Order.desc("updated")));
+        Page<Message> messagesInChannel = null;
+        try {
+            messagesInChannel = messageRepository.getAllMessagesByChannelId(channelId.getId(), pageRequest);
+            if (messagesInChannel.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No messages found in channel: " + channelId);
+            }
+        } catch (Exception e) {
+            //TODO Need to put better error message here
+            System.err.println("Error getting messages for channel: " + channelId);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+        }
+        return messagesInChannel;
     }
+
+
+
+
+
+
 
 }
