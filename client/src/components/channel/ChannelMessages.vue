@@ -1,10 +1,13 @@
 <script setup lang="ts">
-const props = defineProps(['messages']);
+import type { Message } from '@/types';
+import TheMessage from './TheMessage.vue';
+
+const props = defineProps<{ messages: Message[] }>();
 </script>
 
 <template>
   <div>
-    <div v-for="(message, index) in props.messages" :key="index">{{ message }}</div>
+    <TheMessage v-for="message in props.messages" :key="message.id" :message="message" />
   </div>
 </template>
 
