@@ -15,9 +15,10 @@ import java.security.Principal;
 public class WsChannelController {
     @Autowired
     MessageService messageService;
+
     @MessageMapping("/channels/{channelId}")
     @SendTo("/topic/channels/{channelId}")
     public Message message(@DestinationVariable Long channelId, MessageDTO message, Principal principal) {
-         return messageService.save(channelId, message, principal);
+        return messageService.save(channelId, message, principal);
     }
 }
