@@ -1,5 +1,5 @@
 import authService from '@/services/AuthService';
-import { userSchema, type User } from '@/types';
+import { userSchema, type User, type UserDTO } from '@/types';
 import axios from 'axios';
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
@@ -13,8 +13,8 @@ export const useAuthStore = defineStore('auth', () => {
     axios.defaults.headers.common.Authorization = `Bearer ${user.accessToken}`;
   });
 
-  async function login() {
-    const response = await authService.login();
+  async function login(userDTO: UserDTO) {
+    const response = await authService.login(userDTO);
     const newUser: User = userSchema.parse(response.data);
     user.value = newUser;
 
