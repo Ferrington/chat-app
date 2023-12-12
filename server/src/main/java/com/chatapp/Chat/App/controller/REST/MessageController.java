@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 
 
 @RestController
@@ -22,8 +22,8 @@ public class MessageController {
 
     @GetMapping("/{channelId}")
     public Page<Message> getAllMessagesInChannel(@PathVariable Channel channelId,
-                                                 @RequestParam(defaultValue = "0") int page,
-                                                 @RequestParam(defaultValue = "20") int size) {
+                                                                @RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "20") int size) {
         return messageService.getAllMessagesInChannel(channelId, page, size);
     }
 

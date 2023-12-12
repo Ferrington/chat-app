@@ -55,7 +55,7 @@ public class MessageService {
         Page<Message> messagesInChannel = null;
         try {
             messagesInChannel = messageRepository.getAllMessagesByChannelId(channelId.getId(), pageRequest);
-            if (messagesInChannel.isEmpty()) {
+            if (messagesInChannel == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No messages found in channel: " + channelId);
             }
         } catch (Exception e) {
@@ -65,11 +65,5 @@ public class MessageService {
         }
         return messagesInChannel;
     }
-
-
-
-
-
-
 
 }
