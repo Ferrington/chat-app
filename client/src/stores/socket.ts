@@ -1,3 +1,4 @@
+import { messageSchema, type Message } from '@/types';
 import { Client, type StompSubscription } from '@stomp/stompjs';
 import { defineStore, storeToRefs } from 'pinia';
 import { ref, type Ref } from 'vue';
@@ -45,12 +46,12 @@ export const useSocketStore = defineStore('socket', () => {
     }
   }
 
-  function setChannel(channelId: number, messages: Ref<string[]>) {
+  function setChannel(channelId: number, messages: Ref<Message[]>) {
     channel.value = channelId;
     subscribeToChannel(messages);
   }
 
-  function subscribeToChannel(messages: Ref<string[]>) {
+  function subscribeToChannel(messages: Ref<Message[]>) {
     if (!client.active) {
       console.error('Could not subscribe to channel. Client not active.');
       return;
@@ -60,8 +61,9 @@ export const useSocketStore = defineStore('socket', () => {
     channelSubscription.value?.unsubscribe();
     channelSubscription.value = client.subscribe(
       `/topic/channels/${channel.value}`,
-      (message) => {
-        messages.value.push(JSON.parse(message.body).content as string);
+      (payload) => {
+        const message = JSON.parse(payload.body);
+        messages.value.push(messageSchema.parse(message));
       },
       { Authorization: `Bearer ${user.value.accessToken}` },
     );
