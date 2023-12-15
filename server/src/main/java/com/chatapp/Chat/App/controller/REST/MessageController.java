@@ -25,6 +25,7 @@ public class MessageController {
                                                 @RequestParam(defaultValue = "20") int size,
                                                 @RequestParam(defaultValue = "before") String direction) {
         return messageService.getMessagesFromChannel(channelId, messageId, size, direction);
+    }
 
     @PatchMapping
     public Message editMessage(@RequestBody Message editedMessage, Principal principal) {
