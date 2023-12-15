@@ -21,6 +21,7 @@ public class MessageService {
 
     @Autowired
     UserRepository userRepository;
+
     public Message save(Long channelId, MessageDTO message, Principal principal) {
         User currentUser = getUser(principal);
 
@@ -31,6 +32,45 @@ public class MessageService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Message could not be found");
         }
         return retrieveMessage.get();
+    }
+
+
+
+    public Message editMessage(Message editedMessage, Principal principal) {
+
+        User currentUser = getUser(principal);
+        Optional<Message> optOriginalMessage = messageRepository.findById(editedMessage.getId());
+
+        if (optOriginalMessage.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The message does not exist.");
+        }
+
+        Message originalMessage = optOriginalMessage.get();
+        if (!originalMessage.getUser().equals(currentUser)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The user does not have permission to edit this message. >:(");
+        }
+
+        originalMessage.setContent(editedMessage.getContent());
+
+        return messageRepository.save(originalMessage);
+
+    }
+
+
+    public void deleteMessage(Long messageId, Principal principal) {
+        User currentUser = getUser(principal);
+        Optional<Message> optOriginalMessage = messageRepository.findById(messageId);
+
+        if (optOriginalMessage.isEmpty()) {
+            return;
+        }
+
+        Message originalMessage = optOriginalMessage.get();
+        if (!originalMessage.getUser().equals(currentUser)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The user does not have permission to delete this message. >:(");
+        }
+
+        messageRepository.deleteById(messageId);
     }
 
     private User getUser(Principal principal) {
