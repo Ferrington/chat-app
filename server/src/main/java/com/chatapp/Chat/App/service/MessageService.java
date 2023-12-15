@@ -12,15 +12,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class MessageService {
     @Autowired
-    MessageRepository messageRepository;
+    UserRepository userRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private MessageRepository messageRepository;
+
+    public List<Message> getMessagesFromChannel(Long channelId, Long messageId, int size, String direction) {
+        if (messageId == null) {
+            return messageRepository.findMostRecentMessages(channelId, size);
+        }
+
+        if (direction.equals("before")) {
+            return messageRepository.findMessagesBeforeId(channelId, messageId, size);
+        } else {
+            return messageRepository.findMessagesAfterId(channelId, messageId, size);
+        }
+    }
 
     public Message save(Long channelId, MessageDTO message, Principal principal) {
         User currentUser = getUser(principal);
