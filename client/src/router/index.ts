@@ -38,7 +38,7 @@ const router = createRouter({
         requiresAuth: false,
       },
     },
-    {
+    { //Miyoko
       path: '/register',
       name: 'register',
       component: RegistrationView,

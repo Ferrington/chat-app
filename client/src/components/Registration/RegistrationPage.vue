@@ -1,17 +1,21 @@
 <template>
-    <div id="register-box" class="text-center">
-        <img src="./images/three-robots.jpg" class="register-pic" />
+    <div id="outer-container">
         <div class="left">
-            <h1 class="title-text">Create Your Account</h1>
+
         </div>
         <div class="right">
-            <form @submit.prevent="register">
-                <div role="alert" v-if="registrationErrors">
+            <h2 class="title-text">Create a Chat App account</h2>
+            <form @submit.prevent="register" id="register-box">
+                <!-- <div role="alert" v-if="registrationErrors">
                     {{ registrationErrorMsg }}
-                </div>
+                </div> -->
                 <div class="form-input-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" v-model="user.username" required autofocus />
+                </div>
+                <div class="form-input-group">
+                    <label for="username">Email</label>
+                    <input type="text" id="email" v-model="user.email" required autofocus />
                 </div>
                 <div class="form-input-group">
                     <label for="password">Password</label>
@@ -23,10 +27,13 @@
                 </div>
                 <button type="submit">Create Account</button>
                 <p><router-link :to="{ name: 'login' }">Already have an account? Log in.</router-link></p>
+
+
             </form>
         </div>
 
     </div>
+    <button type="button" v-on:click="debuging">Debug</button>
 </template>
 
 <script>
@@ -39,18 +46,26 @@ export default {
                 username: '',
                 password: '',
                 confirmPassword: '',
-                role: 'user',
+                email: '',
+                role: 'ROLE_USER',
             }
         }
-    }
+    },
+    methods: {
+        debuging() {
+            window.alert(
+                ' user name: ' + this.user.username
+                + '\n email: ' + this.user.email
+                + '\n  password: ' + this.user.password
+                + '\n  confirm : ' + this.user.confirmPassword
+            )
+        },
+
+    },
 }
 </script>
 
 <style scoped>
-.register-pic {
-    width: 600px;
-}
-
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);
 
 *:focus {
@@ -60,37 +75,62 @@ export default {
 body {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+
     background: #DDD;
-    font-size: 16px;
+    font-size: 1rem;
     color: #222;
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
 }
 
-#register-box {
-    position: relative;
-    margin: 5% auto;
-    width: 600px;
-    height: 310px;
-    background: #FFF;
+#outer-container {
+    /* background-color: rebeccapurple; */
+    display: flex;
+    justify-content: space-between;
+    width: 700px;
+    height: 500px;
+
+    margin: 10px auto;
+
+
     border-radius: 2px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
+.left {
+    /* background-color: #DD4B39; */
+    background-image: url("welcome-buffet.jpg");
+    background-size: cover;
+    flex-shrink: 2;
+    width: 50%;
+
+
+    /* background-color: #DD4B39; */
+}
+
 .right {
-    position: absolute;
-    top: 0;
-    right: 0;
-    box-sizing: border-box;
+    /* background-color: chartreuse; */
     padding: 40px;
     width: 300px;
     height: 400px;
 }
 
-h1 {
-    margin: 0 0 20px 0;
-    font-weight: 300;
-    font-size: 28px;
+.title-text {
+    display: block;
+    margin-top: 1px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -.2px;
+    text-align: center;
+    line-height: 1.5rem;
+}
+
+#register-box {
+    margin: auto;
+    /* background-color: chocolate; */
+    display: flex;
+    flex-direction: column;
 }
 
 input[type="text"],
@@ -112,7 +152,7 @@ input[type="password"] {
 input[type="text"]:focus,
 input[type="password"]:focus {
     border-bottom: 2px solid #16a085;
-    color: #16a085;
+    /* color: #16a085; */
     transition: 0.2s ease;
 }
 
@@ -123,7 +163,7 @@ input[type="submit"] {
     background: #16a085;
     border: none;
     border-radius: 2px;
-    color: #FFF;
+    /* color: #FFF; */
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     text-transform: uppercase;
@@ -144,8 +184,8 @@ input[type="submit"]:active {
     transition: 0.1s ease;
 }
 
-.or {
-    position: absolute;
+/* .or {
+
     top: 180px;
     left: 280px;
     width: 40px;
@@ -155,63 +195,5 @@ input[type="submit"]:active {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     line-height: 40px;
     text-align: center;
-}
-
-.left {
-    position: absolute;
-    top: 0;
-    left: 0;
-    box-sizing: border-box;
-    padding: 40px;
-    width: 300px;
-    height: 400px;
-    background: url('https://goo.gl/YbktSj');
-    background-size: cover;
-    background-position: center;
-    border-radius: 0 2px 2px 0;
-}
-
-.left .loginwith {
-    display: block;
-    margin-bottom: 40px;
-    font-size: 28px;
-    color: #FFF;
-    text-align: center;
-}
-
-button.social-signin {
-    margin-bottom: 20px;
-    width: 220px;
-    height: 36px;
-    border: none;
-    border-radius: 2px;
-    color: #FFF;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-    transition: 0.2s ease;
-    cursor: pointer;
-}
-
-button.social-signin:hover,
-button.social-signin:focus {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    transition: 0.2s ease;
-}
-
-button.social-signin:active {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-    transition: 0.2s ease;
-}
-
-button.social-signin.facebook {
-    background: #32508E;
-}
-
-button.social-signin.twitter {
-    background: #55ACEE;
-}
-
-button.social-signin.google {
-    background: #DD4B39;
-}
+} */
 </style>

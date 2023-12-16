@@ -1,7 +1,6 @@
 
 <template>
     <div>
-        Welcome!
         <RegistrationPage />
     </div>
 </template>
