@@ -20,6 +20,9 @@
 </template>
 
 <script>
+export default {
+    name: "RegistrationNav"
+}
 </script>
 
 <style scoped></style>

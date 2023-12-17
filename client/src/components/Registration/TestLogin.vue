@@ -1,4 +1,5 @@
 <template>
+    <registration-nav />
     <main class="form-signin w-100 m-auto">
         <form>
             <h1 class="h3 mb-3 fw-normal">Please sign in to test RegistrationPage.vue</h1>
@@ -10,9 +11,12 @@
 </template>
 
 <script>
-
+import RegistrationNav from '@/components/Registration/RegistrationNav.vue'
 export default {
-
+    name: "TestLogin",
+    components: {
+        RegistrationNav,
+    },
 }
 </script>
 
