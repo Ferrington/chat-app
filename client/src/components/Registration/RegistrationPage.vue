@@ -5,22 +5,23 @@
         </div>
         <div class="right">
             <h2 class="title-text">Create a Chat App account</h2>
+
             <form @submit.prevent="register" id="register-box">
                 <div class="form-input-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" v-model="user.username" required autofocus />
+                    <input type="text" id="username" v-model="data.username" required autofocus />
                 </div>
                 <div class="form-input-group">
                     <label for="username">Email</label>
-                    <input type="text" id="email" v-model="user.email" required autofocus />
+                    <input type="text" id="email" v-model="data.email" required autofocus />
                 </div>
                 <div class="form-input-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" v-model="user.password" required />
+                    <input type="password" id="password" v-model="data.password" required />
                 </div>
                 <div class="form-input-group">
                     <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" v-model="user.confirmPassword" required />
+                    <input type="password" id="confirmPassword" v-model="data.confirmPassword" required />
                 </div>
                 <button type="submit">Create Account</button>
                 <!-- <p><router-link :to="{ name: 'login' }">Already have an account? Log in.</router-link></p> -->
@@ -28,35 +29,30 @@
         </div>
 
     </div>
-    <button type="button" v-on:click="debuging">Debug</button>
 </template>
 
-<script>
+<script lang="ts">
+import { reactive } from 'vue';
 
 export default {
     name: 'RegisterPage',
+    setup() {
+        const data = reactive({
+            username: '',
+            password: '',
+            confirmPassword: '',
+            email: '',
+            role: 'ROLE_USER',
+        });
 
-    data() {
-        return {
-            user: {
-                username: '',
-                password: '',
-                confirmPassword: '',
-                email: '',
-                role: 'ROLE_USER',
-            }
+        const register = () => {
+            console.log(data);
         }
-    },
-    methods: {
-        debuging() {
-            window.alert(
-                ' user name: ' + this.user.username
-                + '\n email: ' + this.user.email
-                + '\n  password: ' + this.user.password
-                + '\n  confirm : ' + this.user.confirmPassword
-            )
-        },
 
+        return {
+            data,
+            register
+        }
     },
 }
 </script>

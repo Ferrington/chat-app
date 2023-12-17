@@ -1,6 +1,6 @@
 
 <template>
-    <h1>Registration View</h1>
+    <!-- <h1>Registration View</h1> -->
     <registration-nav />
     <registration-page />
 </template>
