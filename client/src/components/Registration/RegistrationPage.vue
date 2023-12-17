@@ -6,9 +6,6 @@
         <div class="right">
             <h2 class="title-text">Create a Chat App account</h2>
             <form @submit.prevent="register" id="register-box">
-                <!-- <div role="alert" v-if="registrationErrors">
-                    {{ registrationErrorMsg }}
-                </div> -->
                 <div class="form-input-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" v-model="user.username" required autofocus />
@@ -27,8 +24,6 @@
                 </div>
                 <button type="submit">Create Account</button>
                 <p><router-link :to="{ name: 'login' }">Already have an account? Log in.</router-link></p>
-
-
             </form>
         </div>
 
@@ -39,7 +34,8 @@
 <script>
 
 export default {
-    name: 'register',
+    name: 'RegisterPage',
+
     data() {
         return {
             user: {

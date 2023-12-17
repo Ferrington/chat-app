@@ -1,7 +1,8 @@
 import { useAuthStore } from '@/stores/auth';
 import ClientView from '@/views/ClientView.vue';
 import LoginView from '@/views/LoginView.vue';
-import RegistrationView from '@/views/RegistrationView.vue';
+import RegistrationView from '@/views/RegistrationView.vue';//Miyoko
+import TestLogin from '@/components/Registration/TestLogin.vue'; //Miyoko
 import ChannelView from '@/views/client/ChannelView.vue';
 import { storeToRefs } from 'pinia';
 import { createRouter, createWebHistory } from 'vue-router';
@@ -42,6 +43,14 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: RegistrationView,
+      meta: {
+        requiresAuth: false,
+      },
+    },
+    {
+      path: '/test-login',
+      name: 'test-login',
+      component: TestLogin,
       meta: {
         requiresAuth: false,
       },
