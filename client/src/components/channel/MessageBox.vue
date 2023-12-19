@@ -26,7 +26,7 @@ function clear(){
       <textarea name="messageBox" id="messageBox" cols="30" rows="1" placeholder="Message Channel..." auto-grow
       v-model="text" v-on:keydown.enter.exact.prevent="{sendMessage(text);clear();}"></textarea>
       <!--find a way to incorparate the button? make it look cooler? -->
-      <button type="submit">Send</button>
+      <button type="submit"><img src="/Users/jamesrichardson/Desktop/Chat App/chat-app/client/src/assets/images/testicon.png" alt="Send Message" id="sendImg"></button>
     </form>
   </div>
 </template>
@@ -61,6 +61,9 @@ button{
   align-items: flex-end;
   padding-bottom: 15px;
   padding-right: 15px;
+}
+#sendImg{
+  width: 25px;
 }
 
 </style>
