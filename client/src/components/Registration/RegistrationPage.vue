@@ -9,19 +9,19 @@
             <form @submit.prevent="register" id="register-box">
                 <div class="form-input-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" v-model="data.username" required autofocus />
+                    <input type="text" id="username" v-model=data.username required autofocus />
                 </div>
                 <div class="form-input-group">
                     <label for="username">Email</label>
-                    <input type="text" id="email" v-model="data.email" required autofocus />
+                    <input type="text" id="email" required autofocus />
                 </div>
                 <div class="form-input-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" v-model="data.password" required />
+                    <input type="password" id="password" required />
                 </div>
                 <div class="form-input-group">
                     <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" v-model="data.confirmPassword" required />
+                    <input type="password" id="confirmPassword" required />
                 </div>
                 <button type="submit">Create Account</button>
                 <!-- <p><router-link :to="{ name: 'login' }">Already have an account? Log in.</router-link></p> -->
@@ -32,22 +32,51 @@
 </template>
 
 <script lang="ts">
+import router from '@/router';
+import authService from '@/services/AuthService';
 import { reactive } from 'vue';
-
 export default {
     name: 'RegisterPage',
+    comportents: {
+        authService,
+    },
     setup() {
-        const data = reactive({
-            username: '',
-            password: '',
-            confirmPassword: '',
-            email: '',
-            role: 'ROLE_USER',
-        });
+        const data = reactive(
+            {
+                "username": "kuro",
+                "email": "kuro@gsekiro.com",
+                "role": ["user"],
+                "password": "hellokitty"
 
-        const register = () => {
-            console.log(data);
-        }
+            }
+        );
+
+        const isConfPasswordMatched = () => {
+            return true;
+            // data.password === data.confirmPassword;
+        };
+        const register = async () => {
+
+            if (!isConfPasswordMatched()) {
+                window.alert("password and confirmed password don't match. ")
+
+            } else {
+                // await authService.register(JSON.stringify(data.user));
+                const testObject = {
+                    "username": "melina",
+                    "email": "melina@gmail.com",
+                    "role": ["user"],
+                    "password": "hellokitty"
+
+                }
+                await authService.register(
+                    data
+                );
+                console.log(data.username + ' was registerd');
+                //     await router.push({ name: 'login' });
+            }
+
+        };
 
         return {
             data,
@@ -58,7 +87,7 @@ export default {
 </script>
 
 <style scoped>
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);
+/* @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500); */
 
 *:focus {
     outline: none;
