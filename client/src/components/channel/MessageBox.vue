@@ -10,9 +10,6 @@ function clear(){
   text.value = '';
 };
 
-// function boxHeight(){
-//   const messageHeight = 
-// }
 </script>
 
 <template>
@@ -47,15 +44,9 @@ function clear(){
   display: flex;
   flex-direction: row;
   height: 75%;
-  /* border-top: 2px solid black; */
   border: 1px solid lightgray;
   background-color: lightgray;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  
-  
+  border-radius: 5px;
 }
 
 #messageBox {
@@ -69,29 +60,19 @@ function clear(){
   outline: none;
   background-color: inherit;
   border-right: none;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-radius: 5px;
   padding-top: 10px;
   padding-left: 15px;
   padding-right: 50px;
-
 }
 
 button{
   border-left-style: none;
-  /* display: inline-flex;
-  align-items: flex-end; */
   position: absolute;
   bottom: 30px;
   right: 25px;
   background-color: inherit;
   border: none;
-  
 }
-/* #sendImg{
-  width: 25px;
-} */
 
 </style>
