@@ -9,21 +9,47 @@
             <form @submit.prevent="register" id="register-box">
                 <div class="form-input-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" v-model=data.username required autofocus />
+                    <div v-if="usernameOk === false" style="color: orange;">
+                        Length >= 2
+                    </div>
+                    <input type="text" id="username" v-model="username" @input="validateUsername" required autofocus />
                 </div>
                 <div class="form-input-group">
-                    <label for="username">Email</label>
-                    <input type="text" id="email" required autofocus />
+                    <label for="email">Email</label>
+                    <div v-if="emailOk === false" style="color: orange;">
+                        Valid email address
+                    </div>
+                    <input type="text" id="email" v-model="email" @input="validateEmail" required autofocus />
                 </div>
                 <div class="form-input-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" required />
+                    <div v-if="passwordOk === false" style="color: orange;">
+                        length >= 8, Upper, lower, special character and digit
+                    </div>
+                    <div class="password-input-container">
+                        <input id="password" v-model="password" @input="validatePassword" required ref="passwordInput"
+                            :type="showPassword ? 'text' : 'password'" />
+                        <button class="round-button" @click="togglePassword">{{ showPassword ? 'Hide' : 'Show' }} </button>
+                    </div>
                 </div>
                 <div class="form-input-group">
                     <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" required />
+                    <div class="password-input-container">
+                        <input id="confirmPassword" v-model="confirmPassword" @input="validatePassword" required
+                            ref="passwordConfInput" :type="showConfPassword ? 'text' : 'password'" />
+                        <button class="round-button" @click="toggleConfPassword">{{ showConfPassword ? 'Hide' : 'Show' }}
+                        </button>
+                    </div>
                 </div>
-                <button type="submit">Create Account</button>
+                <p v-if="passwordsMatch === false && confirmPassword.length > 0" style="color: orange;">
+                    Passwords must match
+                </p>
+
+
+                <button type="submit"
+                    :disabled="passwordsMatch === false || passwordOk == false || usernameOk === false || emailOk === false">
+                    Create Account
+                </button>
                 <!-- <p><router-link :to="{ name: 'login' }">Already have an account? Log in.</router-link></p> -->
             </form>
         </div>
@@ -35,53 +61,116 @@
 import router from '@/router';
 import authService from '@/services/AuthService';
 import { reactive } from 'vue';
+import { ref } from 'vue';
+
 export default {
     name: 'RegisterPage',
     comportents: {
         authService,
     },
     setup() {
+        const username = ref('');
+        const email = ref('')
+        const password = ref('');
+        const confirmPassword = ref('');
+
+        const usernameOk = ref(false);
+        const emailOk = ref(false);
+        const passwordOk = ref(false)
+        const passwordsMatch = ref(false);
+        const showPassword = ref(false);
+        const showConfPassword = ref(false);
+
+        const validateUsername = () => {
+            usernameOk.value = username.value.length >= 2
+        }
+        const validateEmail = () => {
+            emailOk.value = email.value.includes('@') && email.value.includes('.')
+                && email.value.indexOf('@') < email.value.indexOf('.');
+        };
+        const validatePassword = () => {
+            passwordsMatch.value = password.value === confirmPassword.value;
+            validateStrongPassword();
+        };
+
         const data = reactive(
             {
-                "username": "kuro",
-                "email": "kuro@gsekiro.com",
+                "username": "",
+                "email": "",
                 "role": ["user"],
-                "password": "hellokitty"
-
+                "password": '',
             }
         );
 
-        const isConfPasswordMatched = () => {
-            return true;
-            // data.password === data.confirmPassword;
-        };
         const register = async () => {
 
-            if (!isConfPasswordMatched()) {
-                window.alert("password and confirmed password don't match. ")
+            if (passwordsMatch.value) {
+                data["username"] = username.value
+                data["email"] = email.value;
+                data["password"] = password.value;
 
-            } else {
-                // await authService.register(JSON.stringify(data.user));
-                const testObject = {
-                    "username": "melina",
-                    "email": "melina@gmail.com",
-                    "role": ["user"],
-                    "password": "hellokitty"
-
-                }
                 await authService.register(
                     data
                 );
-                console.log(data.username + ' was registerd');
-                //     await router.push({ name: 'login' });
-            }
 
+            } else {
+                window.alert("password and confirmed password don't match. ")
+            }
+        };
+        const minLength = 8;
+        const validateStrongPassword = () => {
+            passwordOk.value =
+                password.value.length >= minLength
+                &&
+                /[A-Z]/.test(password.value) === true
+                &&
+                /[a-z]/.test(password.value) === true
+                &&
+                /[1234567890]/.test(password.value) === true
+                &&
+                /[!@#$%^&*]/.test(password.value) === true;
+            console.log('validateStrongPassword called: ' + passwordOk.value);
+        };
+
+        const togglePassword = () => {
+            // Toggle the showPassword flag
+            showPassword.value = !showPassword.value;
+
+            // Change the input type based on the showPassword flag
+            const passwordInput = this.$refs.passwordInput;
+            passwordInput.type = showPassword.value ? 'text' : 'password';
+        };
+        const toggleConfPassword = () => {
+            // Toggle the showPassword flag
+            showConfPassword.value = !showConfPassword.value;
+
+            // Change the input type based on the showPassword flag
+            const passwordConfInput = this.$refs.passwordConfInput;
+            passwordConfInput.type = showConfPassword.value ? 'text' : 'password';
         };
 
         return {
             data,
-            register
+            username,
+            email,
+            password,
+            confirmPassword,
+            passwordsMatch,
+            validatePassword,
+            validateUsername,
+            validateEmail,
+            usernameOk,
+            emailOk,
+            register,
+            passwordOk,
+            validateStrongPassword,
+            showPassword,
+            showConfPassword,
+            togglePassword,
+            toggleConfPassword,
         }
+    },
+    computed: {
     },
 }
 </script>
@@ -109,7 +198,7 @@ body {
     /* background-color: rebeccapurple; */
     display: flex;
     justify-content: space-between;
-    width: 700px;
+    width: 800px;
     height: 500px;
 
     margin: 10px auto;
@@ -133,7 +222,7 @@ body {
 .right {
     /* background-color: chartreuse; */
     padding: 40px;
-    width: 300px;
+    width: 500px;
     height: 400px;
 }
 
@@ -160,7 +249,7 @@ input[type="password"] {
     box-sizing: border-box;
     margin-bottom: 20px;
     padding: 4px;
-    width: 220px;
+    width: 400px;
     height: 32px;
     border: none;
     border-bottom: 1px solid #AAA;
@@ -173,6 +262,7 @@ input[type="password"] {
 input[type="text"]:focus,
 input[type="password"]:focus {
     border-bottom: 2px solid #16a085;
+
     /* color: #16a085; */
     transition: 0.2s ease;
 }
@@ -205,6 +295,30 @@ input[type="submit"]:active {
     transition: 0.1s ease;
 }
 
+.password-input-container {
+    display: flex;
+}
+
+.round-button {
+    padding: 8px 12px;
+    /* Adjust padding for size */
+    border-radius: 20px;
+    /* Adjust border-radius for roundness */
+    background-color: #007bff;
+    /* Button background color */
+    color: #fff;
+    /* Button text color */
+    border: none;
+    /* Remove button border */
+    cursor: pointer;
+}
+
+/* Style when button is hovered */
+.round-button:hover {
+    background-color: #0056b3;
+    /* Adjust hover background color */
+}
+
 /* .or {
 
     top: 180px;
@@ -216,5 +330,4 @@ input[type="submit"]:active {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     line-height: 40px;
     text-align: center;
-} */
-</style>
+} */</style>
