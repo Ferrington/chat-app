@@ -300,7 +300,10 @@ input[type="submit"]:active {
 }
 
 .round-button {
-    padding: 8px 12px;
+    font-size: 0.7rem;
+    width: 30px;
+    height: 30px;
+    padding: 1px 1px;
     /* Adjust padding for size */
     border-radius: 20px;
     /* Adjust border-radius for roundness */
@@ -330,4 +333,5 @@ input[type="submit"]:active {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     line-height: 40px;
     text-align: center;
-} */</style>
+} */
+</style>
