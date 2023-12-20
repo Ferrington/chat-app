@@ -51,6 +51,7 @@ const router = createRouter({
       path: '/test-login',
       name: 'test-login',
       component: TestLogin,
+      props: true,
       meta: {
         requiresAuth: false,
       },

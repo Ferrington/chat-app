@@ -2,9 +2,9 @@
     <registration-nav />
     <main class="form-signin w-100 m-auto">
         <form>
-            <h1 class="h3 mb-3 fw-normal">Please sign in to test RegistrationPage.vue</h1>
-            <input type="text" class="form-control" placeholder="User Name" required>
-            <input type="password" class="form-control" placeholder="Password" required>
+            <h1 class="h3 mb-3 fw-normal">Test Login</h1>
+            <input type="text" class="form-control" placeholder="User Name" v-model="username" required>
+            <input type="password" class="form-control" placeholder="Password" v-model="password" required>
             <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
         </form>
     </main>
@@ -12,11 +12,28 @@
 
 <script>
 import RegistrationNav from '@/components/Registration/RegistrationNav.vue'
+// import { ref, defineProps } from 'vue';
+import { ref, onMounted } from 'vue';
+
 export default {
     name: "TestLogin",
     components: {
         RegistrationNav,
     },
+
+    props: { premame: String },
+
+    setup(props) {
+        // const data = ref({
+        const username = props.prename;
+        const password = ''
+        // });
+
+        return {
+            username,
+            password
+        }
+    }
 }
 </script>
 

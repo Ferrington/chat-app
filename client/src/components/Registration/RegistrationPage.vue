@@ -12,14 +12,14 @@
                     <div v-if="usernameOk === false" style="color: orange;">
                         Length >= 2
                     </div>
-                    <input type="text" id="username" v-model="username" @input="validateUsername" required autofocus />
+                    <input type="text" id="username" v-model="username" @input="validateUsername" autofocus />
                 </div>
                 <div class="form-input-group">
                     <label for="email">Email</label>
                     <div v-if="emailOk === false" style="color: orange;">
                         Valid email address
                     </div>
-                    <input type="text" id="email" v-model="email" @input="validateEmail" required autofocus />
+                    <input type="text" id="email" v-model="email" @input="validateEmail" autofocus />
                 </div>
                 <div class="form-input-group">
                     <label for="password">Password</label>
@@ -27,17 +27,19 @@
                         length >= 8, Upper, lower, special character and digit
                     </div>
                     <div class="password-input-container">
-                        <input id="password" v-model="password" @input="validatePassword" required ref="passwordInput"
+                        <input id="password" v-model="password" @input="validatePassword" ref="passwordInput"
                             :type="showPassword ? 'text' : 'password'" />
-                        <button class="round-button" @click="togglePassword">{{ showPassword ? 'Hide' : 'Show' }} </button>
+                        <button type="button" class="round-button" @click="togglePassword">{{ showPassword ? 'Hide' : 'Show'
+                        }} </button>
                     </div>
                 </div>
                 <div class="form-input-group">
                     <label for="confirmPassword">Confirm Password</label>
                     <div class="password-input-container">
-                        <input id="confirmPassword" v-model="confirmPassword" @input="validatePassword" required
+                        <input id="confirmPassword" v-model="confirmPassword" @input="validatePassword"
                             ref="passwordConfInput" :type="showConfPassword ? 'text' : 'password'" />
-                        <button class="round-button" @click="toggleConfPassword">{{ showConfPassword ? 'Hide' : 'Show' }}
+                        <button type="button" class="round-button" @click="toggleConfPassword">{{ showConfPassword ? 'Hide'
+                            : 'Show' }}
                         </button>
                     </div>
                 </div>
@@ -93,30 +95,26 @@ export default {
             validateStrongPassword();
         };
 
-        const data = reactive(
-            {
-                "username": "",
-                "email": "",
-                "role": ["user"],
-                "password": '',
-            }
-        );
+
 
         const register = async () => {
 
-            if (passwordsMatch.value) {
-                data["username"] = username.value
-                data["email"] = email.value;
-                data["password"] = password.value;
-
-                await authService.register(
-                    data
-                );
-
-            } else {
-                window.alert("password and confirmed password don't match. ")
-            }
+            const formData = (
+                {
+                    "username": username.value,
+                    "email": email.value,
+                    "role": ["user"],
+                    "password": password.value,
+                }
+            );
+            // console.log(formData)
+            await authService.register(
+                formData
+            );
+            // router.push({ name: "login" })
+            router.push({ name: 'test-login', params: { prename: "{username.value}" } })
         };
+
         const minLength = 8;
         const validateStrongPassword = () => {
             passwordOk.value =
@@ -129,7 +127,7 @@ export default {
                 /[1234567890]/.test(password.value) === true
                 &&
                 /[!@#$%^&*]/.test(password.value) === true;
-            console.log('validateStrongPassword called: ' + passwordOk.value);
+            // console.log('validateStrongPassword called: ' + passwordOk.value);
         };
 
         const togglePassword = () => {
@@ -150,7 +148,7 @@ export default {
         };
 
         return {
-            data,
+
             username,
             email,
             password,
