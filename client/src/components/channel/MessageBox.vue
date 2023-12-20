@@ -24,7 +24,7 @@ function clear(){
       v-model="text" v-on:keydown.enter.exact.prevent="{sendMessage(text);clear();}"></textarea>
       <!--find a way to incorparate the button? make it look cooler? -->
       <!--OLD IMAGE PLACEHOLDER <img src="/Users/jamesrichardson/Desktop/Chat App/chat-app/client/src/assets/images/testicon.png" alt="Send Message" id="sendImg">-->
-      <button type="submit"><font-awesome-icon :icon="['fas', 'paper-plane']" /></button>
+      <button type="submit" :disabled="text.length==0"><font-awesome-icon :icon="['fas', 'paper-plane']" /></button>
     </form>
   </div>
 </template>
@@ -67,12 +67,17 @@ function clear(){
 }
 
 button{
-  border-left-style: none;
-  position: absolute;
-  bottom: 30px;
-  right: 25px;
-  background-color: inherit;
-  border: none;
+    position: sticky;
+    right: 25px;
+    background-color: inherit;
+    border: none;
+    display: inline-flex;
+    align-items: flex-end;
+    padding-bottom: 15px;
+}
+
+button:hover{
+  cursor: pointer;
 }
 
 </style>

@@ -71,11 +71,16 @@ export const useSocketStore = defineStore('socket', () => {
   }
 
   function sendMessage(message: string) {
-    client.publish({
-      destination: `/ws/channels/${channel.value}`,
-      body: JSON.stringify({ content: message }),
-      headers: { Authorization: `Bearer ${user.value.accessToken}` },
-    });
+
+    //only send message if character count is greater than 0 feel free to remove if thats not the functionality you want. 
+    //sends with both spaces or linebreaks, however those dont translate as a copyable string.
+    if(message.length > 0){
+      client.publish({
+        destination: `/ws/channels/${channel.value}`,
+        body: JSON.stringify({ content: message }),
+        headers: { Authorization: `Bearer ${user.value.accessToken}` },
+      });
+    }
   }
 
   return {
