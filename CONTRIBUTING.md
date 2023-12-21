@@ -2,6 +2,7 @@
 
 ## Table Of Contents
 [New Contributor Guide](#new-contributor-guide)
+
 [Styling Rules](#styling-rules)
 
 
