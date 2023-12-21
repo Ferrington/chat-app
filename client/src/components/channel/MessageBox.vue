@@ -4,80 +4,97 @@ import { ref } from 'vue';
 
 const { sendMessage } = useSocketStore();
 const text = ref('');
+const textArea = ref<HTMLTextAreaElement>();
 
-//clears the message box.
-function clear(){
+function submit() {
+  sendMessage(text.value);
+  clear();
+  textArea.value?.focus();
+}
+
+function clear() {
   text.value = '';
-};
+}
 
+function resizeTextArea() {
+  if (textArea.value == null) return;
+  const styles = window.getComputedStyle(textArea.value);
+  const paddingBlock = Number(styles.paddingBlock.replace('px', '')) * 2;
+  textArea.value.style.height = styles.minHeight;
+  textArea.value.style.height = Math.min(textArea.value.scrollHeight - paddingBlock, 200) + 'px';
+}
 </script>
 
 <template>
-  <!--have to figure out a way to vertically dynamically change the height of the message box....-->
-  <div id="messageDiv">
-      <!-- changed input type text to text box. made it so that you can press enter to send message (not native on text box) as well as you
-      can use shift enter to make a line break old code below also commented out-->
-      <!-- <input type="text" v-model="text" id="messageBox" placeholder="Message Channel..."/> -->
-    <form @submit.prevent="sendMessage(text)" @submit="clear" id="messageArea">
-        <!--add variable to change channel to what ever or whoever youre messaging-->
-      <textarea name="messageBox" id="messageBox" cols="30" rows="1" placeholder="Message Channel..." auto-grow
-      v-model="text" v-on:keydown.enter.exact.prevent="{sendMessage(text);clear();}"></textarea>
-      <!--find a way to incorparate the button? make it look cooler? -->
-      <!--OLD IMAGE PLACEHOLDER <img src="/Users/jamesrichardson/Desktop/Chat App/chat-app/client/src/assets/images/testicon.png" alt="Send Message" id="sendImg">-->
-      <button type="submit" :disabled="text.length==0"><font-awesome-icon :icon="['fas', 'paper-plane']" /></button>
+  <div class="message-div">
+    <form @submit.prevent="submit" class="message-form">
+      <!--add variable to change channel to what ever or whoever youre messaging-->
+      <div class="message-box-wrapper">
+        <textarea
+          ref="textArea"
+          class="message-box"
+          placeholder="Message Channel..."
+          v-model="text"
+          @keydown.enter.exact.prevent="submit"
+          @input="resizeTextArea"
+        ></textarea>
+      </div>
+      <button class="submit-button" type="submit" :disabled="text.length === 0">
+        <FontAwesomeIcon :icon="['fas', 'paper-plane']" />
+      </button>
     </form>
   </div>
 </template>
 
 <style scoped>
-
-/* styled where the message and button make a flexbox so that they are always displayed on the same line.
- have to figure out the styling on the main page to get this functional at smaller sizes though*/
-
-#messageDiv {
+.message-div {
   background-color: white;
   padding-left: 10px;
   padding-right: 10px;
+  padding-bottom: 10px;
 }
 
-#messageArea{
+.message-form {
   display: flex;
   flex-direction: row;
-  height: 75%;
   border: 1px solid lightgray;
   background-color: lightgray;
   border-radius: 5px;
 }
 
-#messageBox {
-  /* height: scrollHeight; */
-  text-align: left;
+.message-box-wrapper {
+  display: flex;
   flex-grow: 1;
+}
+
+.message-box {
+  /* height: scrollHeight; */
+  min-height: 40px;
   overflow-wrap: normal;
   resize: none;
-  max-height: 200px; 
   border-style: none;
   outline: none;
   background-color: inherit;
   border-right: none;
   border-radius: 5px;
-  padding-top: 10px;
+  padding-block: 10px;
   padding-left: 15px;
   padding-right: 50px;
+  overflow: hidden;
+  align-self: flex-end;
 }
 
-button{
-    position: sticky;
-    right: 25px;
-    background-color: inherit;
-    border: none;
-    display: inline-flex;
-    align-items: flex-end;
-    padding-bottom: 15px;
+.submit-button {
+  position: sticky;
+  right: 25px;
+  background-color: inherit;
+  border: none;
+  display: inline-flex;
+  align-items: flex-end;
+  padding-bottom: 15px;
 }
 
-button:hover{
+.submit-button:hover {
   cursor: pointer;
 }
-
 </style>

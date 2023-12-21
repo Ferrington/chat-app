@@ -18,7 +18,7 @@ function formatDate(date: Date) {
         <div class="username">{{ props.message.username }}</div>
         <div class="time-stamp">{{ formatDate(props.message.created) }}</div>
       </div>
-      <div class="message">{{ props.message.content }}</div>
+      <div class="message-content">{{ props.message.content }}</div>
     </div>
   </div>
 </template>
@@ -60,5 +60,9 @@ function formatDate(date: Date) {
 .username {
   font-weight: bold;
   font-size: 1.2rem;
+}
+
+.message-content {
+  white-space: pre;
 }
 </style>
