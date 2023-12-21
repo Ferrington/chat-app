@@ -76,8 +76,15 @@ Component names - Pascal case `<MyComponent />`
 CSS Classes - Kebab case `<div class="my-class"></div>`
 
 #### Composition API
-The script portion of Vue SFC's should use the `setup` tag and specify the language as typescript. We will not use the options api object at all.
+The script portion of Vue SFC's should use the `setup` tag and specify the language as typescript. We will not use the options api object at all. It is also expected that each SFC file be in the same order as shown below:
 ```
 <script setup lang="ts">
 </script>
+
+<template>
+  <div></div>
+</template>
+
+<style scoped>
+</style>
 ```
