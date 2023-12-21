@@ -22,10 +22,12 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 //The third line is addding the specific icon we're looking to use in this case its a paper plane but it will eventually be other things.
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 //this line adds the imported icons into our library. One thing to keep in mind is that you dont need several lines for multiple adds. should be able to do it as csv's 
 //within the parenthetical statement.
-library.add(faPaperPlane);
+library.add(faPaperPlane, faPenToSquare, faTrashCan);
 
 
 axios.defaults.baseURL = import.meta.env.VITE_REMOTE_API + '/api';

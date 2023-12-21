@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import type { Message } from '@/types';
+import ContextMenu from './ContextMenu.vue';
+import { boolean } from 'zod';
+import { ref } from 'vue';
 
 const props = defineProps<{ message: Message }>();
+let isHovering = ref(false);
 
 function formatDate(date: Date) {
   return date.toLocaleDateString() + ' at ' + date.toLocaleTimeString();
@@ -9,7 +13,7 @@ function formatDate(date: Date) {
 </script>
 
 <template>
-  <div class="message">
+  <div class="message" @mouseover="isHovering = true" @mouseleave="isHovering = false">
     <div class="img">
       <div class="placeholder-img">{{ props.message.username[0] }}</div>
     </div>
@@ -20,6 +24,10 @@ function formatDate(date: Date) {
       </div>
       <div class="message">{{ props.message.content }}</div>
     </div>
+    <div class="context">
+      <ContextMenu v-show="isHovering"></ContextMenu> 
+      
+    </div>
   </div>
 </template>
 
@@ -27,6 +35,10 @@ function formatDate(date: Date) {
 .message {
   display: grid;
   grid-template-columns: auto 1fr;
+}
+
+.message:hover {
+  background-color: lightgray;
 }
 
 .right-side {
@@ -61,4 +73,14 @@ function formatDate(date: Date) {
   font-weight: bold;
   font-size: 1.2rem;
 }
+
+.context {
+  position: sticky;
+  width: 300px;
+  height: 25px;
+  right: 50px;
+  justify-self: end;
+}
+
+
 </style>

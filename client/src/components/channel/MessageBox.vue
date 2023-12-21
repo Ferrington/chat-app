@@ -26,6 +26,7 @@ function clear(){
       <!--OLD IMAGE PLACEHOLDER <img src="/Users/jamesrichardson/Desktop/Chat App/chat-app/client/src/assets/images/testicon.png" alt="Send Message" id="sendImg">-->
       <button type="submit" :disabled="text.length==0"><font-awesome-icon :icon="['fas', 'paper-plane']" /></button>
     </form>
+    
   </div>
 </template>
 
