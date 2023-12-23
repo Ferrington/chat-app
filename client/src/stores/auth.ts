@@ -1,10 +1,10 @@
 import authService from '@/services/AuthService';
 import { userSchema, type User } from '@/types';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { jwtDecode } from 'jwt-decode';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User>(JSON.parse(localStorage.getItem('user') ?? '{}'));
@@ -39,7 +39,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function logout() {
-    alert('You have been logged out');
     user.value = {} as User;
     localStorage.removeItem('user');
     router.push({ name: 'login' });
@@ -48,10 +47,6 @@ export const useAuthStore = defineStore('auth', () => {
   function autoLogout(expirationDate: number) {
     const currentDateInSeconds = Math.floor(Date.now() / 1000);
     const timeUntilExpiration = expirationDate - currentDateInSeconds;
-
-    console.log('expire date: ' + expirationDate);
-    console.log('current: ' + currentDateInSeconds);
-    console.log('expire: ' + timeUntilExpiration);
 
     window.clearTimeout(logoutTimer.value);
 
