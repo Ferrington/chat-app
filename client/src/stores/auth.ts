@@ -9,12 +9,20 @@ import { jwtDecode } from 'jwt-decode';
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User>(JSON.parse(localStorage.getItem('user') ?? '{}'));
   const router = useRouter();
+  const logoutTimer = ref<number>(0);
 
   watch(user, (user) => {
     axios.defaults.headers.common.Authorization = `Bearer ${user.accessToken}`;
 
+    if (!('accessToken' in user)) {
+      return;
+    }
+
     try {
       const decodedToken = jwtDecode(user.accessToken);
+      if (decodedToken.exp == null) {
+        return;
+      }
       autoLogout(decodedToken.exp);
     } catch (error) {
       console.error('Error decoding token:', error);
@@ -41,13 +49,15 @@ export const useAuthStore = defineStore('auth', () => {
     const currentDateInSeconds = Math.floor(Date.now() / 1000);
     const timeUntilExpiration = expirationDate - currentDateInSeconds;
 
-    if (timeUntilExpiration <= 0) {
+    console.log('expire date: ' + expirationDate);
+    console.log('current: ' + currentDateInSeconds);
+    console.log('expire: ' + timeUntilExpiration);
+
+    window.clearTimeout(logoutTimer.value);
+
+    logoutTimer.value = window.setTimeout(() => {
       logout();
-    } else {
-      setTimeout(() => {
-        logout();
-      }, 5000);
-    }
+    }, timeUntilExpiration * 1000);
   }
 
   return {
