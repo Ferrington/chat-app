@@ -20,8 +20,8 @@ export const useSocketStore = defineStore('socket', () => {
     connected.value = true;
   };
 
-  client.onDisconnect = () => {
-    console.log('Disconnected');
+  client.onDisconnect = (frame) => {
+    console.log('Disconnected: ' + frame);
     connected.value = false;
   };
 
@@ -71,10 +71,9 @@ export const useSocketStore = defineStore('socket', () => {
   }
 
   function sendMessage(message: string) {
-
-    //only send message if character count is greater than 0 feel free to remove if thats not the functionality you want. 
+    //only send message if character count is greater than 0 feel free to remove if thats not the functionality you want.
     //sends with both spaces or linebreaks, however those dont translate as a copyable string.
-    if(message.length > 0){
+    if (message.length > 0) {
       client.publish({
         destination: `/ws/channels/${channel.value}`,
         body: JSON.stringify({ content: message }),
