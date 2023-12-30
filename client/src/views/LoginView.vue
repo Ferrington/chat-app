@@ -10,6 +10,11 @@ const user = ref<UserDTO>({
   username: '',
   password: '',
 });
+
+let passwordFieldType = 'password';
+
+const switchVisibility = () =>
+  (passwordFieldType = passwordFieldType === 'password' ? 'text' : 'password');
 </script>
 
 <template>
@@ -19,7 +24,7 @@ const user = ref<UserDTO>({
         <h1>Please Sign In</h1>
         <div id="fields">
           <div class="input-container">
-            <label>Username</label>
+            <label for="username">Username</label>
             <input
               type="text"
               id="username"
@@ -30,23 +35,28 @@ const user = ref<UserDTO>({
             />
           </div>
           <div class="input-container">
-            <label>Password</label>
+            <label for="password">Password</label>&nbsp;
             <input
-              type="password"
+              :type="passwordFieldType"
               id="password"
-              placeholder="Password"
+              placeholder="********"
               v-model="user.password"
               required
             />
           </div>
         </div>
-        <button type="button">Login</button>
+        <button @click="switchVisibility">See Password</button>
+        <input type="submit" class="submit" />
       </form>
     </div>
   </div>
 </template>
 
 <style scoped>
+* {
+  font-family: sans-serif;
+}
+
 #container {
   text-align: center;
   display: flex;
@@ -66,14 +76,6 @@ const user = ref<UserDTO>({
   border-radius: 10px;
 }
 
-label {
-  text-align: left;
-  font-size: 14px;
-  text-transform: none;
-  margin-bottom: 2px;
-  margin-top: 10px;
-}
-
 input {
   float: left;
   width: calc(100% - 20px);
@@ -85,7 +87,7 @@ input {
   outline: none;
 }
 
-button {
+.submit {
   width: 100%;
   height: 35px;
   background: #00adf3;
