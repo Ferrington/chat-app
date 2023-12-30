@@ -1,3 +1,4 @@
+import { messageSchema, type Message } from '@/types';
 import { Client, type StompSubscription } from '@stomp/stompjs';
 import { defineStore, storeToRefs } from 'pinia';
 import { ref, type Ref } from 'vue';
@@ -19,8 +20,8 @@ export const useSocketStore = defineStore('socket', () => {
     connected.value = true;
   };
 
-  client.onDisconnect = () => {
-    console.log('Disconnected');
+  client.onDisconnect = (frame) => {
+    console.log('Disconnected: ' + frame);
     connected.value = false;
   };
 
@@ -45,12 +46,12 @@ export const useSocketStore = defineStore('socket', () => {
     }
   }
 
-  function setChannel(channelId: number, messages: Ref<string[]>) {
+  function setChannel(channelId: number, messages: Ref<Message[]>) {
     channel.value = channelId;
     subscribeToChannel(messages);
   }
 
-  function subscribeToChannel(messages: Ref<string[]>) {
+  function subscribeToChannel(messages: Ref<Message[]>) {
     if (!client.active) {
       console.error('Could not subscribe to channel. Client not active.');
       return;
@@ -59,9 +60,10 @@ export const useSocketStore = defineStore('socket', () => {
     messages.value = [];
     channelSubscription.value?.unsubscribe();
     channelSubscription.value = client.subscribe(
-      `/topic/greetings/${channel.value}`,
-      (message) => {
-        messages.value.push(JSON.parse(message.body).content as string);
+      `/topic/channels/${channel.value}`,
+      (payload) => {
+        const message = JSON.parse(payload.body);
+        messages.value.push(messageSchema.parse(message));
       },
       { Authorization: `Bearer ${user.value.accessToken}` },
     );
@@ -69,11 +71,15 @@ export const useSocketStore = defineStore('socket', () => {
   }
 
   function sendMessage(message: string) {
-    client.publish({
-      destination: `/ws/channels/${channel.value}`,
-      body: JSON.stringify({ content: message }),
-      headers: { Authorization: `Bearer ${user.value.accessToken}` },
-    });
+    //only send message if character count is greater than 0 feel free to remove if thats not the functionality you want.
+    //sends with both spaces or linebreaks, however those dont translate as a copyable string.
+    if (message.length > 0) {
+      client.publish({
+        destination: `/ws/channels/${channel.value}`,
+        body: JSON.stringify({ content: message }),
+        headers: { Authorization: `Bearer ${user.value.accessToken}` },
+      });
+    }
   }
 
   return {

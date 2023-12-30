@@ -14,3 +14,14 @@ export type UserDTO = {
   username: string;
   password: string;
 };
+export const messageSchema = z.object({
+  id: z.number(),
+  userId: z.number(),
+  username: z.string(),
+  channelId: z.number(),
+  content: z.string(),
+  created: z.string().pipe(z.coerce.date()),
+  updated: z.string().pipe(z.coerce.date()),
+});
+
+export type Message = z.infer<typeof messageSchema>;
