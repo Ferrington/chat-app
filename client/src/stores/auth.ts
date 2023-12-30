@@ -8,6 +8,7 @@ import { useRouter } from 'vue-router';
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User>(JSON.parse(localStorage.getItem('user') ?? '{}'));
   const router = useRouter();
+  const loginFailed = ref(false);
 
   watch(user, (user) => {
     axios.defaults.headers.common.Authorization = `Bearer ${user.accessToken}`;
@@ -17,12 +18,16 @@ export const useAuthStore = defineStore('auth', () => {
     const response = await authService.login(userDTO);
     const newUser: User = userSchema.parse(response.data);
     user.value = newUser;
-
-    router.push({ name: 'channel', params: { channelId: 1 } });
+    if (response) {
+      router.push({ name: 'channel', params: { channelId: 1 } });
+    } else {
+      loginFailed.value = true;
+    }
   }
 
   return {
     user,
     login,
+    loginFailed,
   };
 });
