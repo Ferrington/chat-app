@@ -11,10 +11,7 @@ const user = ref<UserDTO>({
   password: '',
 });
 
-let passwordFieldType = 'password';
-
-const switchVisibility = () =>
-  (passwordFieldType = passwordFieldType === 'password' ? 'text' : 'password');
+const showPassword = ref(false);
 </script>
 
 <template>
@@ -37,15 +34,16 @@ const switchVisibility = () =>
           <div class="input-container">
             <label for="password">Password</label>&nbsp;
             <input
-              :type="passwordFieldType"
+              :type="showPassword ? 'text' : 'password'"
               id="password"
               placeholder="********"
               v-model="user.password"
               required
             />
           </div>
+          <input type="checkbox" id="checkbox" v-model="showPassword" />
+          <label for="checkbox">Show Password</label>
         </div>
-        <button @click="switchVisibility">See Password</button>
         <input type="submit" class="submit" />
       </form>
     </div>
