@@ -51,6 +51,7 @@ function clearError() {
               type="text"
               id="username"
               @input="clearError"
+              class="input-box"
               v-model="user.username"
               required
               autofocus
@@ -62,6 +63,7 @@ function clearError() {
               :type="showPassword ? 'text' : 'password'"
               id="password"
               @input="clearError"
+              class="input-box"
               v-model="user.password"
               required
             />
@@ -103,7 +105,7 @@ function clearError() {
   text-align: center;
 }
 
-.input-container {
+.input-box {
   float: left;
   width: calc(100% - 20px);
   height: 35px;

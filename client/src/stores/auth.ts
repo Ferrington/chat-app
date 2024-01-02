@@ -1,7 +1,8 @@
 import authService from '@/services/AuthService';
 import { userSchema, type User, type UserDTO } from '@/types';
 import { objectsHaveSameKeys } from '@/utils/objectsHaveSameKeys';
-import axios, { type AxiosResponse } from 'axios';
+import { makeRequest } from '@/utils/makeRequest';
+import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
@@ -41,38 +42,20 @@ export const useAuthStore = defineStore('auth', () => {
   });
 
   async function login(userDTO: UserDTO) {
-    try {
-      const response = await authService.login(userDTO);
+    const response = await makeRequest(() => authService.login(userDTO), {
+      successStatuses: [200],
+      errorStatuses: {
+        400: 'All fields are required.',
+        409: (response) => response.data.message,
+      },
+    });
 
-      if (response.status === 200) {
-        successfulLoginActions(response);
-      }
-    } catch (error) {
-      if (!(error instanceof Error)) return;
-      handleLoginError(error);
-    }
-  }
-
-  function successfulLoginActions(response: AxiosResponse) {
-    const newUser: User = userSchema.parse(response.data);
-    user.value = newUser;
-
-    router.push({ name: 'channel', params: { channelId: 1 } });
-  }
-
-  function handleLoginError(error: Error) {
-    loginFailed.value = true;
-    if (!axios.isAxiosError(error)) {
-      console.error('Non-axios error:', error);
-      return;
-    }
-
-    if (error.response?.status === 400) {
-      authError.value = 'Username and Password cannot be blank.';
-    } else if (error.response?.status === 401) {
-      authError.value = 'Login attempt failed. Please try again.';
+    if (response.type === 'success') {
+      const newUser: User = userSchema.parse(response.data);
+      user.value = newUser;
+      router.push({ name: 'channel', params: { channelId: 1 } });
     } else {
-      authError.value = 'Something went wrong on our end. Try again later.';
+      authError.value = response.error;
     }
   }
 
