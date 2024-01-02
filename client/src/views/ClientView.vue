@@ -29,7 +29,8 @@ onUnmounted(() => {
 <style scoped>
 .container {
   display: grid;
-  height: 100vh;
+  position: absolute;
+  inset: 0;
   grid-template-columns: 250px 1fr;
 }
 

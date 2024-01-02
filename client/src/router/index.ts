@@ -46,7 +46,7 @@ router.beforeEach((to) => {
 
   const requiresAuth = to.matched.some((x) => x.meta.requiresAuth);
 
-  if (requiresAuth && !('accessToken' in user.value)) {
+  if (requiresAuth && user.value.accessToken === '') {
     return { name: 'login' };
   }
 });
