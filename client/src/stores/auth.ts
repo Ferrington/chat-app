@@ -45,8 +45,8 @@ export const useAuthStore = defineStore('auth', () => {
     const response = await makeRequest(() => authService.login(userDTO), {
       successStatuses: [200],
       errorStatuses: {
-        400: 'All fields are required.',
-        409: (response) => response.data.message,
+        400: 'Username and password cannot be blank.',
+        401: 'Login attempt failed. Please try again.',
       },
     });
 
