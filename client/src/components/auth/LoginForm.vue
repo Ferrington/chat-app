@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 import type { UserDTO } from '@/types';
+import { storeToRefs } from 'pinia';
 
-import { ref, computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const { login, clearAuthError } = useAuthStore();
 const { authError } = storeToRefs(useAuthStore());
@@ -71,7 +71,7 @@ function clearError() {
           <input type="checkbox" id="checkbox" v-model="showPassword" />
           <label for="checkbox">Show Password</label>
         </div>
-        <input type="submit" class="submit" />
+        <button type="submit" class="submit">Login</button>
         <p v-if="displayError.length > 0" class="login-error">{{ displayError }}</p>
       </form>
     </div>

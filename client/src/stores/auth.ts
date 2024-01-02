@@ -1,7 +1,7 @@
 import authService from '@/services/AuthService';
 import { userSchema, type User, type UserDTO } from '@/types';
-import { objectsHaveSameKeys } from '@/utils/objectsHaveSameKeys';
 import { makeRequest } from '@/utils/makeRequest';
+import { objectsHaveSameKeys } from '@/utils/objectsHaveSameKeys';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { defineStore } from 'pinia';
@@ -64,7 +64,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function logout() {
-    user.value = {} as User;
+    user.value = emptyUser;
     localStorage.removeItem('user');
     router.push({ name: 'login' });
   }

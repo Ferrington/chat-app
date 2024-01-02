@@ -69,6 +69,7 @@ function resizeTextArea() {
 
 .message-box {
   /* height: scrollHeight; */
+  flex-grow: 1;
   min-height: 40px;
   overflow-wrap: normal;
   resize: none;
