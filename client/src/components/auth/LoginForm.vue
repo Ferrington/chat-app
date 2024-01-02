@@ -13,9 +13,9 @@ const user = ref<UserDTO>({
   password: '',
 });
 const loginError = ref('');
-const displayError = computed(() => authError.value || loginError.value);
-
 const showPassword = ref(false);
+
+const displayError = computed(() => authError.value || loginError.value);
 
 function submit() {
   if (!validateFormData()) return;
@@ -40,10 +40,10 @@ function clearError() {
 </script>
 
 <template>
-  <div id="container">
-    <div id="login">
+  <div id="container" class="container">
+    <div id="login" class="login">
       <form v-on:submit.prevent="submit">
-        <h1>Please Sign In</h1>
+        <h1 class="title">Please Sign In</h1>
         <div id="fields">
           <div class="input-container">
             <label for="username">Username</label>
@@ -81,7 +81,7 @@ function clearError() {
   font-family: sans-serif;
 }
 
-#container {
+.container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,7 +89,7 @@ function clearError() {
   height: 100vh;
 }
 
-#login {
+.login {
   position: relative;
   box-sizing: border-box;
   height: auto;
@@ -99,12 +99,11 @@ function clearError() {
   border-radius: 10px;
 }
 
-h1 {
+.title {
   text-align: center;
 }
 
-input[type='text'],
-input[type='password'] {
+.input-container {
   float: left;
   width: calc(100% - 20px);
   height: 35px;
@@ -128,7 +127,7 @@ input[type='password'] {
   margin-top: 20px;
 }
 
-button:hover {
+.submit:hover {
   background: #0799d4;
 }
 
