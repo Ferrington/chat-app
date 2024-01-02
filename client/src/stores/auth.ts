@@ -1,5 +1,6 @@
 import authService from '@/services/AuthService';
 import { userSchema, type User, type UserDTO } from '@/types';
+import { objectsHaveSameKeys } from '@/utils/objectsHaveSameKeys';
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { defineStore } from 'pinia';
@@ -7,7 +8,15 @@ import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref<User>(JSON.parse(localStorage.getItem('user') ?? '{}'));
+  const emptyUser: User = {
+    id: 0,
+    username: '',
+    accessToken: '',
+    tokenType: '',
+    roles: [],
+  };
+  const user = ref<User>(emptyUser);
+  loadUserFromLocalStorage();
   const router = useRouter();
   const loginFailed = ref(false);
   const logoutTimer = ref<number>(0);
@@ -52,6 +61,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function handleLoginError(error: Error) {
+    loginFailed.value = true;
     if (!axios.isAxiosError(error)) {
       console.error('Non-axios error:', error);
       return;
@@ -85,6 +95,22 @@ export const useAuthStore = defineStore('auth', () => {
     logoutTimer.value = window.setTimeout(() => {
       logout();
     }, timeUntilExpiration * 1000);
+  }
+
+  async function loadUserFromLocalStorage() {
+    const localUser = localStorage.getItem('user');
+    if (localUser == null) return;
+
+    try {
+      const parsedUser = JSON.parse(localUser);
+      if (objectsHaveSameKeys(parsedUser, emptyUser)) {
+        user.value = parsedUser;
+        return;
+      }
+      logout();
+    } catch (error) {
+      logout();
+    }
   }
 
   return {
