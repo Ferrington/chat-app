@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/auth';
-
-const { login } = useAuthStore();
+import LoginForm from '@/components/auth/LoginForm.vue';
 </script>
 
 <template>
-  <div><button type="button" @click="login">Login</button></div>
+  <div>
+    <LoginForm />
+  </div>
 </template>
 
 <style scoped></style>

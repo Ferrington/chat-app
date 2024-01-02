@@ -1,5 +1,7 @@
 import authService from '@/services/AuthService';
-import { userSchema, type User } from '@/types';
+import { userSchema, type User, type UserDTO } from '@/types';
+import { objectsHaveSameKeys } from '@/utils/objectsHaveSameKeys';
+import { makeRequest } from '@/utils/makeRequest';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { defineStore } from 'pinia';
@@ -7,9 +9,19 @@ import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref<User>(JSON.parse(localStorage.getItem('user') ?? '{}'));
+  const emptyUser: User = {
+    id: 0,
+    username: '',
+    accessToken: '',
+    tokenType: '',
+    roles: [],
+  };
+  const user = ref<User>(emptyUser);
+  loadUserFromLocalStorage();
   const router = useRouter();
+  const loginFailed = ref(false);
   const logoutTimer = ref<number>(0);
+  const authError = ref('');
 
   watch(user, (user) => {
     axios.defaults.headers.common.Authorization = `Bearer ${user.accessToken}`;
@@ -29,13 +41,26 @@ export const useAuthStore = defineStore('auth', () => {
     }
   });
 
-  async function login() {
-    const response = await authService.login();
-    const newUser: User = userSchema.parse(response.data);
+  async function login(userDTO: UserDTO) {
+    const response = await makeRequest(() => authService.login(userDTO), {
+      successStatuses: [200],
+      errorStatuses: {
+        400: 'Username and password cannot be blank.',
+        401: 'Login attempt failed. Please try again.',
+      },
+    });
 
-    user.value = newUser;
+    if (response.type === 'success') {
+      const newUser: User = userSchema.parse(response.data);
+      user.value = newUser;
+      router.push({ name: 'channel', params: { channelId: 1 } });
+    } else {
+      authError.value = response.error;
+    }
+  }
 
-    router.push({ name: 'channel', params: { channelId: 1 } });
+  function clearAuthError() {
+    authError.value = '';
   }
 
   function logout() {
@@ -55,9 +80,28 @@ export const useAuthStore = defineStore('auth', () => {
     }, timeUntilExpiration * 1000);
   }
 
+  async function loadUserFromLocalStorage() {
+    const localUser = localStorage.getItem('user');
+    if (localUser == null) return;
+
+    try {
+      const parsedUser = JSON.parse(localUser);
+      if (objectsHaveSameKeys(parsedUser, emptyUser)) {
+        user.value = parsedUser;
+        return;
+      }
+      logout();
+    } catch (error) {
+      logout();
+    }
+  }
+
   return {
     user,
     login,
+    loginFailed,
     logout,
+    authError,
+    clearAuthError,
   };
 });
