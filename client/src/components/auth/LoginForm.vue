@@ -1,23 +1,48 @@
 <script setup lang="ts">
-import { useAuthStore } from '../../stores/auth';
-import type { UserDTO } from '../../types';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/stores/auth';
+import type { UserDTO } from '@/types';
 
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
-const { login } = useAuthStore();
+const { login, clearAuthError } = useAuthStore();
+const { authError } = storeToRefs(useAuthStore());
 
 const user = ref<UserDTO>({
   username: '',
   password: '',
 });
+const loginError = ref('');
+const displayError = computed(() => authError.value || loginError.value);
 
 const showPassword = ref(false);
+
+function submit() {
+  if (!validateFormData()) return;
+
+  login(user.value);
+}
+
+function validateFormData() {
+  let validated = true;
+  if (user.value.username.length === 0) {
+    loginError.value = 'Please enter your username.';
+  } else if (user.value.password.length === 0) {
+    loginError.value = 'Please enter your password.';
+  }
+  return validated;
+}
+
+function clearError() {
+  loginError.value = '';
+  clearAuthError();
+}
 </script>
 
 <template>
   <div id="container">
     <div id="login">
-      <form v-on:submit.prevent="login(user)">
+      <form v-on:submit.prevent="submit">
         <h1>Please Sign In</h1>
         <div id="fields">
           <div class="input-container">
@@ -25,7 +50,7 @@ const showPassword = ref(false);
             <input
               type="text"
               id="username"
-              placeholder="Username"
+              @input="clearError"
               v-model="user.username"
               required
               autofocus
@@ -36,7 +61,7 @@ const showPassword = ref(false);
             <input
               :type="showPassword ? 'text' : 'password'"
               id="password"
-              placeholder="********"
+              @input="clearError"
               v-model="user.password"
               required
             />
@@ -45,6 +70,7 @@ const showPassword = ref(false);
           <label for="checkbox">Show Password</label>
         </div>
         <input type="submit" class="submit" />
+        <p v-if="displayError.length > 0" class="login-error">{{ displayError }}</p>
       </form>
     </div>
   </div>
@@ -56,7 +82,6 @@ const showPassword = ref(false);
 }
 
 #container {
-  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,7 +99,12 @@ const showPassword = ref(false);
   border-radius: 10px;
 }
 
-input {
+h1 {
+  text-align: center;
+}
+
+input[type='text'],
+input[type='password'] {
   float: left;
   width: calc(100% - 20px);
   height: 35px;
@@ -83,6 +113,7 @@ input {
   border-radius: 5px;
   margin-top: 2.5px;
   outline: none;
+  margin-bottom: 10px;
 }
 
 .submit {
@@ -94,9 +125,14 @@ input {
   border: none;
   cursor: pointer;
   transition: all 0.5s;
+  margin-top: 20px;
 }
 
 button:hover {
   background: #0799d4;
+}
+
+.login-error {
+  color: rgb(194, 20, 20);
 }
 </style>

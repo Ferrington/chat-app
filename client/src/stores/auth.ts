@@ -1,7 +1,7 @@
 import authService from '@/services/AuthService';
 import { userSchema, type User, type UserDTO } from '@/types';
 import { objectsHaveSameKeys } from '@/utils/objectsHaveSameKeys';
-import axios, { AxiosError, type AxiosResponse } from 'axios';
+import axios, { type AxiosResponse } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
@@ -70,7 +70,7 @@ export const useAuthStore = defineStore('auth', () => {
     if (error.response?.status === 400) {
       authError.value = 'Username and Password cannot be blank.';
     } else if (error.response?.status === 401) {
-      authError.value = 'Your login attempt failed. Please try again.';
+      authError.value = 'Login attempt failed. Please try again.';
     } else {
       authError.value = 'Something went wrong on our end. Try again later.';
     }
