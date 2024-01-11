@@ -16,15 +16,15 @@ const messages = ref<Message[]>([]);
 
 const channelId = ref<number>();
 
-async function loadMessages(channelId: number) {
-  const response = await messageService.getMessagesFromChannel(channelId);
-
-  if (response.status === 200) {
+//WIP
+const loadMessages = async (channelId: number) => {
+  try {
+    const response = await messageService.getMessagesFromChannel(channelId);
     messages.value = response.data;
-  } else {
-    console.error('loadMessage has some error. please check :)');
+  } catch (error) {
+    console.error(`Error while fetching messages :'(`, error);
   }
-}
+};
 
 watch(
   [() => route.params.channelId, connected],
@@ -33,7 +33,9 @@ watch(
     channelId.value = id;
     if (connected) {
       setChannel(id, messages);
-      // loadMessages(channelId.value);
+
+      //WIP
+      loadMessages(id);
     }
   },
   { immediate: true },

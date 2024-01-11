@@ -19,10 +19,11 @@ VALUES
     ('Movies', 'Talk about movies'),
     ('Pets', 'Talk about pets');
 
+-- This needs evaluation. not working correctly. 'content' is considered as a long value?
 --INSERT INTO messages (channel_id, user_id, content, created, updated)
 --VALUES
 --    (1, 1, 'This is a dummy message 1', CURRENT_TIMESTAMP - INTERVAL '22' MINUTE, CURRENT_TIMESTAMP- INTERVAL '22' MINUTE),
---    (1, 1, 'This is a dummy message 2?', CURRENT_TIMESTAMP- - INTERVAL '21' MINUTE, CURRENT_TIMESTAMP- INTERVAL '21' MINUTE),
+--    (1, 1, 'This is a dummy message 2', CURRENT_TIMESTAMP- - INTERVAL '21' MINUTE, CURRENT_TIMESTAMP- INTERVAL '21' MINUTE),
 --     (1, 1, 'This is a dummy message 3', CURRENT_TIMESTAMP - INTERVAL '20' MINUTE, CURRENT_TIMESTAMP - INTERVAL '20' MINUTE),
 --    (1, 1, 'This is a dummy message 4', CURRENT_TIMESTAMP - INTERVAL '19' MINUTE, CURRENT_TIMESTAMP - INTERVAL '19' MINUTE),
 --     (1, 1, 'This is a dummy message 5', CURRENT_TIMESTAMP - INTERVAL '18' MINUTE, CURRENT_TIMESTAMP - INTERVAL '18' MINUTE),
